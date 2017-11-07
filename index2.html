@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>HTML2</title>
+    <style>
+table, th,tr,td {
+    border: 1px solid black;
+    background-color: blue;
+
+}
+</style>
+<script>
+//start of script of drag and drop
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}// end of script o drag and drop
+
+//start of script of web storage
+// Check browser support
+function localStorage(){
+if (typeof(Storage) !== "undefined") {
+    // Store
+    localStorage.place="Nairobi";
+    // Retrieve
+    document.getElementById("display").innerHTML = localStorage.place;
+} else {
+    document.getElementById("display").innerHTML = "oops try laters";
+}
+}//end of web storage
+//start of worker
+var w;
+function startWorker() {
+    if(typeof(Worker) !== "undefined") {
+        if(typeof(w) == "undefined") {
+            w = new Worker("demo_workers.js");
+        }
+        w.onmessage = function(event) {
+            document.getElementById("result").innerHTML = event.data;
+        };
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+    }
+}
+
+function stopWorker() {
+    w.terminate();
+    w = undefined;
+}// end of web Worker
+//start of geolocation
+var x = document.getElementById("demo");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+    var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="
+    +latlon+"&zoom=14&size=400x300&key=AIzaSyAsBSInRuUe9gHwP66a6yinUP2DEQb47aY";
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}// end of geolocation
+</script>
+  </head>
+  <body>
+  <h1 style="text-align:center">HTML2 WORK</h1>
+  <table style="height:150%;">
+    <tr>
+      <td><h2 style="color:white;text-align:center;"><u>video 1</u></h2>
+        <iframe width="320" height="180"src="https://www.youtube.com/embed/HooGMhHTJlY?controls=1"></iframe>
+      </td>
+      <td ><h2 style="color:white;text-align:center;"><u>video 2</u></h2>
+        <video width="320"  controls>
+           <source src="You can't resist laughing while watching animals - Funny animal compilation.mp4" type="video/mp4">
+  <!-- <source src="movie.ogg" type="video/ogg"> -->
+  Your browser does not support the video tag.
+       </video>
+          </td>
+          <td><h2 style="color:white;text-align:center;"><u>video 3</u></h2>
+            <iframe width="320" height="180" src="https://www.youtube.com/embed/HooGMhHTJlY?controls=1">
+      </iframe></td>
+          <td><h2 style="color:white;text-align:center;"><u>video 4</u></h2>
+            <video width="320"  controls>
+              <source src="You can't resist laughing while watching animals - Funny animal compilation.mp4" type="video/mp4">
+              <!-- <source src="movie.ogg" type="video/ogg"> -->
+              Your browser does not support the video tag.
+            </video>
+              </td>
+    </tr></table><br><br>
+    <table style="height:150%;">
+    <tr>
+     <td>
+       <h2 style="color:white;text-align:center;"><u>Audio 1</u></h2>
+       <audio controls>
+  <source src="Hanap-Hanap By James Reid and Nadine Lustre (Official Audio).mp4" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+     </td>
+     <td>
+       <h2 style="color:white;text-align:center;"><u>Audio 2</u></h2>
+       <audio controls>
+  <source src="Colbie Caillat - Try (Audio).mp4" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+     </td>
+     <td>
+       <h2 style="color:white;text-align:center;"><u>Image by plug-in object</u></h2>
+       <object width="320" height="300" data="image1.png"></object>
+     </td>
+     <td>
+       <h2 style="color:white;text-align:center;"><u>Image by plug-in embed</u></h2>
+       <embed width="320" height="300" src="image2.jpg" >
+     </td>
+    </tr>
+  </table>
+  <table style="height:150%;">
+    <tr>
+      <td width="625">
+          <h2 style="color:white;text-align:center;"><u>Object to drag</u></h2>
+        <p style="color:white;font-size:20px;text-align:center;" id="drag" draggable="true" ondragstart="drag(event)">Hello there how are you</p>
+      </td>
+      <td width="625" id="drop" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2 style="color:white;text-align:center;"><u>Dropping point</u></h2>
+      </td>
+
+
+    </tr>
+    <tr>
+      <td  width="625">
+        <p id="demo" style="color:white;text-align:center;"><b><u>Geolocation</u></b></p>
+
+<button onclick="getLocation()">Click me to know your location</button>
+<br><br><br>
+<div id="mapholder"></div>
+</td>
+<td  width="625">
+ <h2 style="color:white;text-align:center;"><u>Web storage</u></h2>
+ <button onclick="localStorage()">Click to see how webstorage works</button>
+ <p style="font-weight:bold;" id="display"></p>
+ <p>Count numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button>
+<button onclick="stopWorker()">Stop Worker</button>
+</td>
+    </tr>
+  </table>
+  </body>
+</html>
